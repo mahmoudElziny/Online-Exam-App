@@ -1,5 +1,5 @@
 "use client";
-import { setNestedObjectValues, useFormik } from "formik";
+import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -10,10 +10,10 @@ import facebook from "../../public/assets/images/facebook.png";
 import google from "../../public/assets/images/google.png";
 import apple from "../../public/assets/images/apple-logo.png";
 import eyePassword from "../../public/assets/images/eye-password.png";
-
 import { FormValues } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AuthNav from "@/components/authNav/authNav";
 
 export default function Login() {
 
@@ -98,25 +98,8 @@ export default function Login() {
                     </div>
                     <Image src={elevateImage} alt="Welcome to Elevate" />
                 </div>
-                <div className="w-1/2 p-14 flex flex-col	">
-                    <div className="">
-                        <ul className="flex justify-end items-center">
-                            <li className="text-xs fw-3">
-                                <select name="language" id="lang" title="language">
-                                    <option value="English">English</option>
-                                    <option value="Arabic">Arabic</option>
-                                </select>
-                            </li>
-                            <li className="text-[#4461F2] px-3 text-xs fw-3 cursor-pointer">
-                                <Link href="/signin">Sign in</Link>
-                            </li>
-                            <li className="text-[#4461F2] border-2 rounded-lg cursor-pointer">
-                                <div className="px-3 py-1 text-xs fw-3">
-                                    <Link href="/signup">Register</Link>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                <div className="w-1/2 p-14 flex flex-col">
+                    <AuthNav />
                     <div className="mt-14">
                         <h5 className="font-bold text-l">Sign in</h5>
                         <form onSubmit={formik.handleSubmit}>
