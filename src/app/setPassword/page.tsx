@@ -12,7 +12,6 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
-import { FormValues } from "@/lib/types";
 import { useState } from "react";
 
 
@@ -24,13 +23,29 @@ export default function SetPassword() {
     const [isVisible, setIsVisible] = useState(false);
 
 
-    const handleFormData = async function (values: { email: string, newPassword: string }) {
-        const res = await axios.put("https://exam.elevateegy.com/api/v1/auth/resetPassword", values)
+    const handleFormData = async function (values: { email: string, newPassword: Number | string }) {
+        let res = await axios.put("https://exam.elevateegy.com/api/v1/auth/resetPassword", values)
             .catch((err) => {
                 formik.setErrors({ email: `${err.response.data.message}` });
             })
-            .then((res) => {
-                if (res?.status === 200) { router.push("/"); }
+            .then(async (res) => {
+                let user = await signIn("credentials", {
+                    email: values.email,
+                    password: values.newPassword,
+                    redirect: false,
+                    callbackUrl: "/",
+                });
+                if (user?.error) {
+
+                    if (user.status === 401) {
+                        formik.setErrors({ newPassword: 'Incorrect email or password' });
+                    } else {
+                        formik.setErrors({ email: 'An unexpected error occurred. Please try again later.' });
+                    }
+                }
+                else if (user?.ok) {
+                    router.push("/");
+                }
             });
     };
 
@@ -38,7 +53,7 @@ export default function SetPassword() {
         email: Yup.string()
             .email("Invalid email address")
             .required("Email is required"),
-        password: Yup.string()
+        newPassword: Yup.string()
             .required("Password is required")
             .matches(
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
@@ -69,7 +84,7 @@ export default function SetPassword() {
             <div className="w-1/2 p-14 flex flex-col	">
                 <AuthNav />
                 <div className="mt-8">
-                    <h5 className="font-bold text-l">Verify code</h5>
+                    <h5 className="font-bold text-l">Set a Password</h5>
                     <form onSubmit={formik.handleSubmit}>
                         <input
                             id="email"
@@ -88,31 +103,30 @@ export default function SetPassword() {
                             <p className="text-red-500 text-sm p-1">{formik.errors.email}</p>
                         )}
                         <div className="relative w-full">
-                                <input
-                                    name="password"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.newPassword}
-                                    onBlur={formik.handleBlur}
-                                    className={`w-full bg-[#F9F9F9] rounded-md mt-3 p-2 focus:outline-none 
+                            <input
+                                name="newPassword"
+                                onChange={formik.handleChange}
+                                value={formik.values.newPassword}
+                                onBlur={formik.handleBlur}
+                                className={`w-full bg-[#F9F9F9] rounded-md mt-3 p-2 focus:outline-none 
                                     ${formik.errors.newPassword && formik.touched.newPassword
-                                            ? 'focus:ring-2 focus:ring-red-500 border-red-500'
-                                            : 'focus:ring-2 focus:ring-blue-500'}`}
-                                    type={isVisible ? 'text' : 'password'}
-                                    placeholder="Enter Password"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setIsVisible(!isVisible)}
-                                    className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
-                                    aria-label={isVisible ? 'Hide password' : 'Show password'}
-                                >
-                                    <Image src={eyePassword} alt="eye" className="w-10  h-10 mt-3 " />
-                                </button>
-                            </div>
-                            {formik.touched.newPassword && formik.errors.newPassword && (
-                                <p className="text-red-500 text-sm p-1">{formik.errors.newPassword}</p>
-                            )}
-
+                                        ? 'focus:ring-2 focus:ring-red-500 border-red-500'
+                                        : 'focus:ring-2 focus:ring-blue-500'}`}
+                                type={isVisible ? 'text' : 'password'}
+                                placeholder="Enter New Password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setIsVisible(!isVisible)}
+                                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                                aria-label={isVisible ? 'Hide password' : 'Show password'}
+                            >
+                                <Image src={eyePassword} alt="eye" className="w-10  h-10 mt-3 " />
+                            </button>
+                        </div>
+                        {formik.touched.newPassword && formik.errors.newPassword && (
+                            <p className="text-red-500 text-sm p-1">{formik.errors.newPassword}</p>
+                        )}
                         <button
                             className="bg-[#4461F2] text-xs text-white w-full p-2 rounded-md mt-6 shadow-lg"
                             type="submit"

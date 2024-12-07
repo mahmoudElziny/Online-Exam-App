@@ -41,7 +41,7 @@ export default function Login() {
             redirect: false,
             callbackUrl: "/",
         });
-        console.log(user);
+
         if (user?.error) {
 
             if (user.status === 401) {

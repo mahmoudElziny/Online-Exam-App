@@ -3,7 +3,6 @@ import AuthNav from "@/components/authNav/authNav";
 import WelcomeElevate from "@/components/welcomeElevate/welcomeElevate";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import github from "../../public/assets/images/github-mark.png";
 import facebook from "../../public/assets/images/facebook.png";
 import google from "../../public/assets/images/google.png";
