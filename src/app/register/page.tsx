@@ -1,8 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import Image from "next/image";
-import elevateImage from "../../public/assets/images/welcomeToElevate.png";
 import github from "../../public/assets/images/github-mark.png";
 import facebook from "../../public/assets/images/facebook.png";
 import google from "../../public/assets/images/google.png";
@@ -15,6 +13,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthNav from "@/components/authNav/authNav";
+import WelcomeElevate from "@/components/welcomeElevate/welcomeElevate";
 
 export default function signup() {
 
@@ -23,18 +22,19 @@ export default function signup() {
 
     const handleFormData = async function (values: FormValues) {
         let user = await axios.post("https://exam.elevateegy.com/api/v1/auth/signup", values)
-            .catch(function (err) {
-                console.log(err);
-            });
-
-        if (user?.data.message == 'success') {
-            let user1 = signIn("credentials", {
-                email: values.email,
-                password: values.password,
-                redirect: false,
-                callbackUrl: "/",
-            });
-        }
+            .catch((err) => {
+                formik.setErrors({ email: `${err.response.data.message}` });
+            }).then(async(user) => {
+                if (user?.status === 200) {
+                    await signIn("credentials", {
+                        email: values.email,
+                        password: values.password,
+                        redirect: false,
+                        callbackUrl: "/",
+                    });
+                    router.push("/");
+                }
+            })
     }
 
     let validationSchema = Yup.object({
@@ -78,21 +78,12 @@ export default function signup() {
     return (
         <>
             <div className="container mx-auto my-10 w-2/4  flex shadow-sm border-spacing-5">
-                <div className="w-1/2 bg-[#F0F4FC] p-14 rounded-e-[50px] shadow-[15px_5px_20px_0_rgba(0,0,0,0.1)]">
-                    <div>
-                        <h1 className="text-3xl font-semibold">Welcome to</h1>
-                        <h1 className="text-3xl text-[#122D9C] font-bold">Elevate</h1>
-                        <p className="my-5">
-                            Quidem autem voluptatibus qui quaerat aspernatur architecto natus
-                        </p>
-                    </div>
-                    <Image src={elevateImage} alt="Welcome to Elevate" />
-                </div>
+                <WelcomeElevate />
                 <div className="w-1/2 p-14 flex flex-col	">
                     <AuthNav />
-                    <div className="mt-14">
+                    <div className="mt-8">
                         <h5 className="font-bold text-l">Sign up</h5>
-                        <form onSubmit={formik.handleSubmit} className="">
+                        <form onSubmit={formik.handleSubmit}>
                             <input
                                 id="username"
                                 name="username"
@@ -227,7 +218,7 @@ export default function signup() {
                                 className="bg-[#4461F2] text-xs text-white w-full p-2 rounded-md mt-6 shadow-lg"
                                 type="submit"
                             >
-                                Sign up
+                                Create Account
                             </button>
                             <p className="or my-5 text-xs text-center text-[#6C737F]">
                                 Or Continue with

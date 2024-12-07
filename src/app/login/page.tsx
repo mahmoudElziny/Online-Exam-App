@@ -4,7 +4,6 @@ import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import Link from "next/link";
 import Image from "next/image";
-import elevateImage from "../../public/assets/images/welcomeToElevate.png";
 import github from "../../public/assets/images/github-mark.png";
 import facebook from "../../public/assets/images/facebook.png";
 import google from "../../public/assets/images/google.png";
@@ -14,6 +13,7 @@ import { FormValues } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthNav from "@/components/authNav/authNav";
+import WelcomeElevate from "@/components/welcomeElevate/welcomeElevate";
 
 export default function Login() {
 
@@ -54,7 +54,7 @@ export default function Login() {
             if (rememberMe) {
                 localStorage.setItem("userData", JSON.stringify(values));
             }
-            router.push("/")
+            router.push("/");
         }
     };
 
@@ -88,19 +88,10 @@ export default function Login() {
     return (
         <>
             <div className="container mx-auto my-10 w-2/4  flex shadow-sm border-spacing-5">
-                <div className="w-1/2 bg-[#F0F4FC] p-14 rounded-e-[50px] shadow-[15px_5px_20px_0_rgba(0,0,0,0.1)]">
-                    <div>
-                        <h1 className="text-3xl font-semibold">Welcome to</h1>
-                        <h1 className="text-3xl text-[#122D9C] font-bold">Elevate</h1>
-                        <p className="my-5">
-                            Quidem autem voluptatibus qui quaerat aspernatur architecto natus
-                        </p>
-                    </div>
-                    <Image src={elevateImage} alt="Welcome to Elevate" />
-                </div>
+                <WelcomeElevate />
                 <div className="w-1/2 p-14 flex flex-col">
                     <AuthNav />
-                    <div className="mt-14">
+                    <div className="mt-8">
                         <h5 className="font-bold text-l">Sign in</h5>
                         <form onSubmit={formik.handleSubmit}>
                             <input
@@ -147,7 +138,7 @@ export default function Login() {
                             )}
 
                             <h6 className="text-[#4461F2] text-xs my-2 justify-self-end cursor-pointer">
-                                <Link href="/forgetPassword">Forgot Password?</Link>
+                                <Link href="/forgotPassword">Forgot Password?</Link>
                             </h6>
                             <div>
                                 <div className="text-primary text-right text-sm">
