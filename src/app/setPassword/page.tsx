@@ -20,7 +20,7 @@ export default function SetPassword() {
     const [isVisible, setIsVisible] = useState(false);
 
 
-    const handleFormData = async function (values: { email: string, newPassword: Number | string }) {
+    const handleFormData = async function (values: { email: string, newPassword: number | string }) {
         await axios.put("https://exam.elevateegy.com/api/v1/auth/resetPassword", values)
             .catch((err) => {
                 formik.setErrors({ email: `${err.response.data.message}` });

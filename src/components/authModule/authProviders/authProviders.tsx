@@ -1,9 +1,7 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import github from "../../../public/assets/images/github-mark.png";
-import facebook from "../../../public/assets/images/facebook.png";
 import google from "../../../public/assets/images/google.png";
-import apple from "../../../public/assets/images/apple-logo.png";
 
 
 

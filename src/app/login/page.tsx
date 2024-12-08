@@ -32,7 +32,7 @@ export default function Login() {
     });
 
     const handleFormData = async function (values: FormValues) {
-        let user = await signIn("credentials", {
+        const user = await signIn("credentials", {
             email: values.email,
             password: values.password,
             redirect: false,

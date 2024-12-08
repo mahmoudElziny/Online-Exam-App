@@ -12,7 +12,7 @@ import AuthNav from "@/components/authModule/authNav/authNav";
 import WelcomeElevate from "@/components/authModule/welcomeElevate/welcomeElevate";
 import AuthProviders from "@/components/authModule/authProviders/authProviders";
 
-export default function signup() {
+export default function Signup() {
 
     const router = useRouter();
     const [isVisible, setIsVisible] = useState(false);
