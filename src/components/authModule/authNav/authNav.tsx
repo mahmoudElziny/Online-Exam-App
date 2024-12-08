@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function AuthNav() {
     return (
-        <div className="">
+        <div>
             <ul className="flex justify-end items-center">
                 <li className="text-xs fw-3">
                     <select name="language" id="lang" title="language">

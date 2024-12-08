@@ -4,16 +4,13 @@ import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import Link from "next/link";
 import Image from "next/image";
-import github from "../../public/assets/images/github-mark.png";
-import facebook from "../../public/assets/images/facebook.png";
-import google from "../../public/assets/images/google.png";
-import apple from "../../public/assets/images/apple-logo.png";
 import eyePassword from "../../public/assets/images/eye-password.png";
 import { FormValues } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import AuthNav from "@/components/authNav/authNav";
-import WelcomeElevate from "@/components/welcomeElevate/welcomeElevate";
+import AuthNav from "@/components/authModule/authNav/authNav";
+import WelcomeElevate from "@/components/authModule/welcomeElevate/welcomeElevate";
+import AuthProviders from "@/components/authModule/authProviders/authProviders";
 
 export default function Login() {
 
@@ -69,7 +66,7 @@ export default function Login() {
         }
     }, []);
 
-    let formik = useFormik<FormValues>({
+    const formik = useFormik<FormValues>({
         initialValues: {
             email: "",
             password: "",
@@ -78,18 +75,12 @@ export default function Login() {
         validationSchema,
     });
 
-    const handleIdentityGoogle = async () => {
-        signIn("google", { callbackUrl: "/" });
-    }
-    const handleIdentityGithub = async () => {
-        signIn("github", { callbackUrl: "/" });
-    }
 
     return (
         <>
-            <div className="container mx-auto my-10 w-2/4  flex shadow-sm border-spacing-5">
+            <div className="mx-auto md:my-10 md:w-1/2 sm:w-full md:flex md:flex-row sm:flex-col shadow-sm border-spacing-5">
                 <WelcomeElevate />
-                <div className="w-1/2 p-14 flex flex-col">
+                <div className="md:w-1/2 sm:w-full p-14 flex flex-col">
                     <AuthNav />
                     <div className="mt-8">
                         <h5 className="font-bold text-l">Sign in</h5>
@@ -166,30 +157,7 @@ export default function Login() {
                             >
                                 Sign in
                             </button>
-                            <p className="or my-5 text-xs text-center text-[#6C737F]">
-                                Or Continue with
-                            </p>
-                            <div id="icons" className="flex justify-center gap-4">
-                                <div
-                                    onClick={handleIdentityGithub}
-                                    className="shadow-md w-6 h-6 flex justify-center items-center rounded-lg cursor-pointer"
-                                >
-                                    <Image src={github} alt="github"></Image>
-                                </div>
-                                <div className="shadow-md w-6 h-6 flex justify-center items-center rounded-lg cursor-pointer">
-                                    <Image src={facebook} alt="facebook"></Image>
-                                </div>
-                                <div className="shadow-md w-6 h-6 flex justify-center items-center rounded-lg cursor-pointer">
-                                    <Image
-                                        onClick={handleIdentityGoogle}
-                                        src={google}
-                                        alt="google"
-                                    ></Image>
-                                </div>
-                                <div className="shadow-md w-6 h-6 flex justify-center items-center rounded-lg cursor-pointer">
-                                    <Image src={apple} alt="apple"></Image>
-                                </div>
-                            </div>
+                            <AuthProviders/>
                         </form>
                     </div>
                 </div>
