@@ -1,9 +1,10 @@
+import Quizes from "@/components/quizes";
 
 
 export default function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-    </div>
+    <>
+      <Quizes />
+    </>
   );
 }

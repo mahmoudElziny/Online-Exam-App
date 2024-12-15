@@ -2,7 +2,7 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import eyePassword from "../../public/assets/images/eye-password.png";
-import { FormValues } from "@/lib/types";
+import { FormValues } from "@/lib/interfaces/types";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";

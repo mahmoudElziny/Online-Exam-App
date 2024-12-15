@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import Image from "next/image";
 import eyePassword from "../../public/assets/images/eye-password.png";
-import { FormValues } from "@/lib/types";
+import { FormValues } from "@/lib/interfaces/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthNav from "@/components/authModule/authNav/authNav";
