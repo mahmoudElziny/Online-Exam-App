@@ -1,20 +1,26 @@
 "use client";
-import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from "react-icons/hi";
 import elevate from "../public/assets/images/Final Logo 1.png";
-import dashboardicon from "../public/assets/images/Vector-dashboard.png";
-import quizhistoryicon from "../public/assets/images/vector-quizhistory.png";
-import logouticon from "../public/assets/images/vector-logout.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { changeToken, changeUserData } from "@/lib/redux/userSlice";
 
 export default function SideNavbar() {
 
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+
     const handleLogout = () => {
+        localStorage.removeItem("userToken");
+        dispatch(changeToken(null));
+        dispatch(changeUserData(null));
+        router.push("/login");
     }
 
     return (
-        <Sidebar aria-label="Default sidebar example">
+        <section>
             <Image src={elevate} alt="elevate" className="p-4"></Image>
             <div className="flex mt-5">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 ml-3">
@@ -35,6 +41,6 @@ export default function SideNavbar() {
                 <h4 onClick={handleLogout} className="ml-5 cursor-pointer">Log Out</h4>
             </div>
 
-        </Sidebar>
+        </section>
     );
 }

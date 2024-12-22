@@ -36,7 +36,7 @@ export default function Login() {
             email: values.email,
             password: values.password,
             redirect: false,
-            callbackUrl: "/",
+            callbackUrl: "/dashboard",
         });
 
         if (user?.error) {
@@ -51,7 +51,7 @@ export default function Login() {
             if (rememberMe) {
                 localStorage.setItem("userData", JSON.stringify(values));
             }
-            router.push("/");
+            router.push("/dashboard");
         }
     };
 

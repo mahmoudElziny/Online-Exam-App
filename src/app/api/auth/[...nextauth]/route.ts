@@ -2,11 +2,22 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import axios from "axios";
 
 
 
-export const options : NextAuthOptions = {
+export const OPTIONS: NextAuthOptions = {
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 15
+    },
+    callbacks: {
+        async jwt({ token, user }) {
+            return { ...token, ...user };
+        },
+        async session({ session, token }) {
+            return { ...session, user: token };
+        }
+    },
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_ID as string,
@@ -30,27 +41,29 @@ export const options : NextAuthOptions = {
                     placeholder: "Password",
                 },
             },
-            async authorize(credentials){
-                try{
-                    const res =await axios.post('https://exam.elevateegy.com/api/v1/auth/signin', {
-                        email : credentials?.email,
-                        password : credentials?.password
-                    })
-                    if (res.status === 200 && res.data){
-                        console.log(res.data);
-                        
-                        return res.data
+            async authorize(credentials) {
+
+                const res = await fetch('https://exam.elevateegy.com/api/v1/auth/signin', {
+                    body: JSON.stringify({
+                        email: credentials?.email,
+                        password: credentials?.password
+                    }),
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                    return null
-                } catch(error){
-                    if(axios.isAxiosError(error)){
-                        console.log(error);
-                        if(error.status === 401){
-                            console.log("wrong data" , credentials)
-                        }
-                    }
+                });
+
+                const user = await res.json();
+
+                console.log("User Data : ", user);
+
+
+                if (user.message === 'success' && user) {
+                    return user
                 }
-                },
+                return null
+            }
         })
     ],
     pages: {
@@ -59,6 +72,6 @@ export const options : NextAuthOptions = {
     }
 }
 
-const handler = NextAuth(options); 
+const handler = NextAuth(OPTIONS);
 
 export { handler as GET, handler as POST };

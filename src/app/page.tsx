@@ -1,10 +1,9 @@
 import Quizes from "@/components/quizes";
 
 
-export default function Dashboard() {
+export default function Home() {
   return (
     <>
-      <Quizes />
     </>
   );
 }

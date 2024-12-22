@@ -11,25 +11,30 @@ import { useState } from "react";
 import AuthNav from "@/components/authModule/authNav/authNav";
 import WelcomeElevate from "@/components/authModule/welcomeElevate/welcomeElevate";
 import AuthProviders from "@/components/authModule/authProviders/authProviders";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Signup() {
 
     const router = useRouter();
     const [isVisible, setIsVisible] = useState(false);
 
+    const user = useSelector((state: any) => state.user);
+    const dispatch = useDispatch();
+
     const handleFormData = async function (values: FormValues) {
         await axios.post("https://exam.elevateegy.com/api/v1/auth/signup", values)
             .catch((err) => {
-                formik.setErrors({ email: `${err.response.data.message}` });
+                formik.setErrors({ phone: `${err.response.data.message}` });
+                //handle errors 
             }).then(async(user) => {
                 if (user?.status === 200) {
                     await signIn("credentials", {
                         email: values.email,
                         password: values.password,
                         redirect: false,
-                        callbackUrl: "/",
+                        callbackUrl: "/dashboard",
                     });
-                    router.push("/");
+                    router.push("/dashboard");
                 }
             })
     }
@@ -204,6 +209,9 @@ export default function Signup() {
                             {formik.touched.phone && formik.errors.phone && (
                                 <p className="text-red-500 text-sm p-1">{formik.errors.phone}</p>
                             )}
+                            <h6 className=" text-xs my-2 justify-self-end">
+                            Already have an account? <button type="submit" onClick={() => router.push("/login")} className="text-[#4461F2]">Login</button>
+                        </h6>
                             <button
                                 className="bg-[#4461F2] text-xs text-white w-full p-2 rounded-md mt-6 shadow-lg"
                                 type="submit"
